@@ -7,28 +7,34 @@
 
 import UIKit
 
-class EggViewController: UIViewController {
+class OrangeViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         // Do any additional setup after loading the view.
     }
+    @IBOutlet weak var progress: UIProgressView!
     @IBOutlet weak var titleLabel: UILabel!
-    let allTime = ["Soft":120,"Medium":210, "Hard":350]
-    var secondRemain = 0
+    let allTime = ["Soft":150,"Medium":240, "Hard":350]
+    var totalTime = 0
     var timer = Timer()
+    var secondpassed = 0
     @IBAction func handleClick(_ sender: UIButton) {
         timer.invalidate()
         let timing = sender.currentTitle!
-        secondRemain = allTime[timing]!
+        totalTime = allTime[timing]!
+        progress.progress = 0.0
+        secondpassed = 0
+        titleLabel.text = timing
        timer = Timer.scheduledTimer(timeInterval: 1,target: self, selector:#selector(updateTimer),userInfo: nil,repeats:true )
     }
     @objc func updateTimer(){
-        if secondRemain > 0 {
-            print("\(secondRemain) seconds")
-            titleLabel.text = "\(secondRemain) seconds"
-            secondRemain -= 1
+        if secondpassed < totalTime {
+            secondpassed += 1
+            titleLabel.text = String( totalTime - secondpassed)
+
+            progress.progress = Float(secondpassed) / Float(totalTime)
         } else {
             timer.invalidate()
             titleLabel.text = "Done!"
